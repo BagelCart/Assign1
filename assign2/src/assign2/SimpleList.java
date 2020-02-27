@@ -41,28 +41,38 @@ class SimpleList
 	 * one location. 
 	 * <p>
 	 * In the event that the list is already full, add will
-	 * push the last element off the end of the list and it
-	 * will no longer be included.
+	 * increase the size of the array by 50% (rounded down)
+	 * and add the new integer.
 	 * 
 	 * @param element Integer value to be added to the list.
 	 */
 	public void add(int element)
 	{
 		int current = count;
+		int[] newList;
 		
-		if (current == 10)
-			current = 9;
-		
-		while (current > 0)
+		if (count == list.length)
 		{
-			list[current] = list[current - 1];
-			--current;
+			newList = new int[(int) Math.floor(list.length * 1.5)];
+			while (current > 0)
+			{
+				newList[current]=list[current-1];
+				--current;
+			}
+			list=newList;
+		}
+		else
+		{
+			while (current > 0)
+			{
+				list[current] = list[current - 1];
+				--current;
+			}
 		}
 		
 		list[0] = element;
 		
-		if (count < 10)
-			++count;
+		++count;
 	}
 	
 	/**
@@ -72,6 +82,10 @@ class SimpleList
 	 * gap left by the removed value. In the event that the
 	 * list contains multiple entries of the given integer,
 	 * all will be removed.
+	 * <p>
+	 * If the list is more than 25% empty after removal,
+	 * the list capacity will be shrunk by 25%. Capacity
+	 * will never be less than 1 integer.
 	 * 
 	 * @param element the integer value to be removed.
 	 */
@@ -79,6 +93,7 @@ class SimpleList
 	{
 		int current = 0;
 		int shiftstart;
+		int[] newList;
 		
 		while (current < count)
 		{
@@ -95,6 +110,21 @@ class SimpleList
 			}
 			else
 				++current;
+		}
+		
+		if (count <= ((int) Math.floor(list.length * 0.75))
+				&& list.length > 1)
+		{
+			newList = new int[(int) Math.floor(list.length * 0.75)];
+			if (count > 0)
+			{
+				while (current <= 0)
+				{
+					newList[current] = list[current];
+					--current;
+				}
+				list = newList;
+			}
 		}
 	}
 	
