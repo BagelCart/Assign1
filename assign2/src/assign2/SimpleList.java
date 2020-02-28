@@ -52,15 +52,7 @@ class SimpleList
 		int[] newList;
 		
 		if (count == list.length)
-		{
-			newList = new int[(int) Math.floor(list.length * 1.5)];
-			while (current > 0)
-			{
-				newList[current]=list[current-1];
-				--current;
-			}
-			list=newList;
-		}
+			expand();
 		else
 		{
 			while (current > 0)
@@ -118,7 +110,7 @@ class SimpleList
 			newList = new int[(int) Math.floor(list.length * 0.75)];
 			if (count > 0)
 			{
-				while (current <= 0)
+				while (current >= 0)
 				{
 					newList[current] = list[current];
 					--current;
@@ -181,5 +173,86 @@ class SimpleList
 		}
 		
 		return location;
+	}
+	
+	/**
+	 * Appends the given element to the end of the list.
+	 * If the list was full, it increases the size by 50%
+	 * so there will be room.  Increments the count.
+	 * 
+	 * @param element Integer to be added to the end of the list.
+	 */
+	public void append(int element)
+	{
+		if (count == list.length)
+			expand();
+		
+		list[count] = element;
+		++count;
+	}
+	
+	/**
+	 * Returns the first element in the list.
+	 * If there are no elements n the list, then returns -1.
+	 * 
+	 * @return Stored value at the first location in the list.
+	 */
+	public int first()
+	{
+		int value;
+		
+		if (count == 0)
+			value = -1;
+		else
+			value = list[0];
+		
+		return value;
+	}
+	
+	/**
+	 * Returns the last element in the list.
+	 * If there are no elements n the list, then returns -1.
+	 * 
+	 * @return Stored value of the last element in the list.
+	 */
+	public int last()
+	{
+		int value;
+		
+		if (count == 0)
+			value = -1;
+		else
+			value = list[count - 1];
+		
+		return value;
+	}
+	
+	/**
+	 * Returns the current number of possible locations
+	 * in the list. This is the current size of the list.
+	 * 
+	 * @return Total amount of storage locations in the list.
+	 */
+	public int size()
+	{
+		return list.length;
+	}
+	
+	/**
+	 * Expands the current number of available storage locations
+	 * in the list by 50%, rounded down to the nearest integer.
+	 */
+	private void expand()
+	{
+		int current = list.length;
+		int[] newList = new int
+				[(int) Math.floor(list.length * 1.5)];
+		
+		while (current > 0)
+		{
+			newList[current]=list[current-1];
+			--current;
+		}
+		list=newList;
 	}
 }
